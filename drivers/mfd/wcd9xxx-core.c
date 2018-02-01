@@ -603,7 +603,7 @@ static void wcd9xxx_device_exit(struct wcd9xxx *wcd9xxx)
 }
 
 
-#ifdef CONFIG_DEBUG_FS
+#if defined(CONFIG_DEBUG_FS) && defined(WCD9XXX_CORE_DEBUG)
 struct wcd9xxx *debugCodec;
 
 static struct dentry *debugfs_wcd9xxx_dent;
@@ -1392,26 +1392,26 @@ static int wcd9xxx_slim_probe(struct slim_device *slim)
 			__func__, ret);
 		goto err_slim_add;
 	}
-#ifdef CONFIG_DEBUG_FS
+#if defined(CONFIG_DEBUG_FS) && defined(WCD9XXX_CORE_DEBUG)
 	debugCodec = wcd9xxx;
 
 	debugfs_wcd9xxx_dent = debugfs_create_dir
 		("wcd9xxx_core", 0);
 	if (!IS_ERR(debugfs_wcd9xxx_dent)) {
 		debugfs_peek = debugfs_create_file("slimslave_peek",
-		S_IFREG | S_IRUGO, debugfs_wcd9xxx_dent,
+		S_IFREG | S_IRUSR, debugfs_wcd9xxx_dent,
 		(void *) "slimslave_peek", &codec_debug_ops);
 
 		debugfs_poke = debugfs_create_file("slimslave_poke",
-		S_IFREG | S_IRUGO, debugfs_wcd9xxx_dent,
+		S_IFREG | S_IRUSR, debugfs_wcd9xxx_dent,
 		(void *) "slimslave_poke", &codec_debug_ops);
 
 		debugfs_power_state = debugfs_create_file("power_state",
-		S_IFREG | S_IRUGO, debugfs_wcd9xxx_dent,
+		S_IFREG | S_IRUSR, debugfs_wcd9xxx_dent,
 		(void *) "power_state", &codec_debug_ops);
 
 		debugfs_reg_dump = debugfs_create_file("slimslave_reg_dump",
-		S_IFREG | S_IRUGO, debugfs_wcd9xxx_dent,
+		S_IFREG | S_IRUSR, debugfs_wcd9xxx_dent,
 		(void *) "slimslave_reg_dump", &codec_debug_ops);
 	}
 #endif
@@ -1437,7 +1437,7 @@ static int wcd9xxx_slim_remove(struct slim_device *pdev)
 	struct wcd9xxx *wcd9xxx;
 	struct wcd9xxx_pdata *pdata = pdev->dev.platform_data;
 
-#ifdef CONFIG_DEBUG_FS
+#if defined(CONFIG_DEBUG_FS) && defined(WCD9XXX_CORE_DEBUG)
 	debugfs_remove_recursive(debugfs_wcd9xxx_dent);
 #endif
 	wcd9xxx = slim_get_devicedata(pdev);
