@@ -427,11 +427,7 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
 		ret = -ETIME;
 	}
 
-<<<<<<< HEAD
-err_cmd_queue:
-=======
 cmd_cleanup:
->>>>>>> v4.4.96
 	xhci_free_command(xhci, cmd);
 	return ret;
 }
